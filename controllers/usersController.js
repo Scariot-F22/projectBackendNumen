@@ -1,52 +1,67 @@
-const db = require('../data/db')
+const db = require("../data/db");
 
-const getUser = (req, res)=>{
-    const {Nombre, Apellido} = req.query;
+const getUser = (req, res) => {
+  const { Nombre, Apellido } = req.query;
 
-    //FIX ME
-    // if (req.query !== Nombre && req.query !== Apellido) {
-    //     res.status(200).send({db})
-    // } No logro que me devulva el arreglo completo si no le ingreso una query param
-   
-    if(Nombre || Apellido){
-        let queryGet = db.find( el => el.Nombre === Nombre || el.Apellido === Apellido);
-        return res.status(200).send({queryGet})
-    } else res.status(401).send({message: 'No se encontraron coincidencias'});
-}
+  //FIX ME
+  // if (req.query !== Nombre && req.query !== Apellido) {
+  //     res.status(200).send({db})
+  // } No logro que me devulva el arreglo completo si no le ingreso una query param
 
-const postUser = (req, res)=>{
-    const { ID, Nombre, Apellido, DNI } = req.body;
+  if (Nombre || Apellido) {
+    let queryGet = db.find(
+      (el) => el.Nombre === Nombre || el.Apellido === Apellido
+    );
+    return res.status(200).send({ queryGet });
+  } else res.status(401).send({ message: "No se encontraron coincidencias" });
+};
 
-    if (!Nombre || !Apellido || !DNI ){
-    return res.status(400).send({message: "Dato obligatorio"})
-    }
-    //FIX ME
-    // if(ID === db.map(el => el.ID)){
-    //     res.status(401).send({mesagge:"El usuario ya existe en la base de datos"})
-    // } //No estoy seguro si esta parte es necesaria
-    else{
-        const data = {
-            ID: Date.now(),
-            Nombre,
-            Apellido,
-            DNI
-          };
-          db.push(data);
-        return res.status(200).send(db)
-    }
-}
+const postUser = (req, res) => {
+  const { ID, Nombre, Apellido, DNI } = req.body;
 
-const putUser = (req, res)=>{
-    res.status(200).send('Peticion PUT')
-}
+  if (!Nombre || !Apellido || !DNI) {
+    return res.status(400).send({ message: "Dato obligatorio" });
+  }
+  //FIX ME
+  // if(ID === db.map(el => el.ID)){
+  //     res.status(401).send({mesagge:"El usuario ya existe en la base de datos"})
+  // } //No estoy seguro si esta parte es necesaria
+  else {
+    const data = {
+      ID: Date.now(),
+      Nombre,
+      Apellido,
+      DNI,
+    };
+    db.push(data);
+    return res.status(200).send(db);
+  }
+};
 
-const deleteUser = (req, res)=>{
-    res.status(200).send('Peticion DELETE')
-}
+const putUser = (req, res) => {
+  const { ID } = req.params;
+  const { Nombre, Apellido, DNI } = req.body;
+
+  let userById = db.find((el) => el.ID == ID);
+
+  if (userById) {
+    if (Nombre) userById.Nombre = Nombre; //Reemplaza el valor de la propiedad del objeto por el que entra por body params
+    if (Apellido) userById.Apellido = Apellido;
+    if (DNI) userById.DNI = DNI;
+    res.status(200).send(db);
+  } else
+    res
+      .status(404)
+      .send({ message: "El ID ingresado no coincide con ningún usuario" });
+};
+
+const deleteUser = (req, res) => {
+  // res.status(200).send('Peticion DELETE')
+};
 
 module.exports = {
-    getUser,
-    postUser,
-    putUser,
-    deleteUser
-}
+  getUser,
+  postUser,
+  putUser,
+  deleteUser,
+};
