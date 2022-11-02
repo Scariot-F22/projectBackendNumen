@@ -27,10 +27,6 @@ const postUser = (req, res) => {
   if (!Nombre || !Apellido || !DNI) {
     return res.status(400).send({ message: "Dato obligatorio" });
   }
-  //FIX ME
-  // if(ID === db.map(el => el.ID)){
-  //     res.status(401).send({mesagge:"El usuario ya existe en la base de datos"})
-  // } //No estoy seguro si esta parte es necesaria
   else {
     const data = {
       ID: Date.now(),
