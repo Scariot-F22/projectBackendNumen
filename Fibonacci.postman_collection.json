@@ -1,0 +1,36 @@
+{
+	"info": {
+		"_postman_id": "1f4d7901-9d8f-455b-b00b-b98bf094f17e",
+		"name": "Fibonacci",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24129524"
+	},
+	"item": [
+		{
+			"name": "getFibonacci",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/fibonacci?quantity=8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"fibonacci"
+					],
+					"query": [
+						{
+							"key": "quantity",
+							"value": "8"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

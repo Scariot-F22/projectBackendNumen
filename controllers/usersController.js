@@ -2,19 +2,24 @@ const db = require("../data/db");
 
 const getUser = (req, res) => {
   const { Nombre, Apellido } = req.query;
-
-  //FIX ME
-  // if (req.query !== Nombre && req.query !== Apellido) {
-  //     res.status(200).send({db})
-  // } No logro que me devulva el arreglo completo si no le ingreso una query param
-
   if (Nombre || Apellido) {
     let queryGet = db.find(
       (el) => el.Nombre === Nombre || el.Apellido === Apellido
     );
-    return res.status(200).send({ queryGet });
-  } else res.status(401).send({ message: "No se encontraron coincidencias" });
+    if (queryGet) {
+      return res.status(200).send({ queryGet });
+    } else res.status(401).send({ message: "No se encontraron coincidencias" });
+  } else res.status(200).send({ db }); //No logro que me devulva el arreglo completo si no le ingreso una query param
 };
+
+const getUserById = (req, res)=>{
+  const { ID } = req.params;
+
+  const idUser = db.find((el) => el.ID == ID);
+  idUser ? 
+  res.status(200).send(idUser)
+  : res.status(404).send({ message: "ID de usuario inválido" })
+}
 
 const postUser = (req, res) => {
   const { ID, Nombre, Apellido, DNI } = req.body;
@@ -56,11 +61,25 @@ const putUser = (req, res) => {
 };
 
 const deleteUser = (req, res) => {
-  // res.status(200).send('Peticion DELETE')
+  const { ID } = req.params;
+
+  const newData = db.find((el) => el.ID == ID);
+
+  if (newData) {
+    let deleteById = db.filter((el) => el.ID != ID);
+    return res.status(200).send({ deleteById });
+  } else
+    res
+      .status(404)
+      .send({
+        message:
+          "El usuario que intenta eliminar no existe en la base de datos",
+      });
 };
 
 module.exports = {
   getUser,
+  getUserById,
   postUser,
   putUser,
   deleteUser,
