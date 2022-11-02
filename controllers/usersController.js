@@ -9,7 +9,7 @@ const getUser = (req, res) => {
     if (queryGet) {
       return res.status(200).send({ queryGet });
     } else res.status(401).send({ message: "No se encontraron coincidencias" });
-  } else res.status(200).send({ db }); //No logro que me devulva el arreglo completo si no le ingreso una query param
+  } else res.status(200).send({ db }); 
 };
 
 const getUserById = (req, res)=>{
